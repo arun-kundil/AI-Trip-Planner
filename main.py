@@ -7,7 +7,7 @@ import os
 app = FastAPI()
 
 class QueryRequest(BaseModel):
-    query: str
+    question: str
 
 @app.post("/query")
 async def query_travel_agent(query:QueryRequest):

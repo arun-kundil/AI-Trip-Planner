@@ -2,6 +2,7 @@ import streamlit as st
 import datetime
 import requests
 import sys
+import textwrap
 
 BASE_URL = "http://localhost:8000"
 
@@ -34,16 +35,21 @@ if submit_button and user_input.strip():
 
         if response.status_code == 200:
             answer = response.json().get("answer", "Sorry, I couldn't get a response.")
-            markdown_content = f"""# :airplane: Your AI-Generated Travel Plan :airplane:
-            # **Generated on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}**
-            # **Created by :** Arun's AI Trip Planner
-            ---
-            {answer}
-            ---
-            *This travel plan was generated using the latest real-time data and insights to help you have the best travel experience possible. Always double-check details and make reservations in advance!*
-            """
+            header_content = textwrap.dedent(f"""
+                # :airplane: Your AI-Generated Travel Plan :airplane:
+                **Generated on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}**
+                **Created by:** Arun's AI Trip Planner
+                ---
+            """)
+            footer_content = textwrap.dedent(
+                """---
+                *This travel plan was generated using the latest real-time data and insights to help you have the best travel experience possible. Always double-check details and make reservations in advance!*
+                """
+            )
 
-            st.markdown(markdown_content)
+            st.markdown(header_content)
+            st.markdown(answer)
+            st.markdown(footer_content)
         else:
             st.error("Sorry, there was an error processing your request. Please try again later.")
     except Exception as e:
